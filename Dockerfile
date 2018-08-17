@@ -28,35 +28,32 @@ RUN apt-get update && apt-get install --no-install-recommends yarn
 
 ENV PATH "$(yarn global bin):$PATH"
 
-WORKDIR /var/www
+WORKDIR /home/app
 RUN ls
 
 # log dir
 VOLUME /var/log/log
 
 # Bundle app source
-COPY . /var/www
-RUN mkdir /var/www/cache
+COPY . /home/app
+RUN mkdir /home/app/cache
 
 RUN touch get_data.sh
 RUN echo '=============='
 RUN echo 'start download'
 RUN echo '=============='
-RUN echo "#!/bin/bash
+RUN echo "#!/bin/bash \
 YEAR=2002 \
 CURRENT=`date +%Y` \
 while [ $YEAR -ne $CURRENT ]; do \
-   curl -LO https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-'$YEAR'.json.zip
-   unzip
+   curl -LO https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-'$YEAR'.json.zip\
+   unzip nvdcve-1.0-'$YEAR'.json.zip\
    YEAR=$(($YEAR+1)) \
 done" > get_data.sh
 
-CMD ["cat", "get_data.sh"]
-CMD ["ls"]
+RUN bash get_data.sh
 # Install app dependencies
-#RUN yarn
-
-#EXPOSE  3000
-#CMD ["yarn", "dev"]
+RUN yarn
+CMD ["yarn", "dev"]
 
 #RUN yarn dev

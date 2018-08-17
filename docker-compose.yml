@@ -2,6 +2,17 @@ version: '3.2'
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-    - "5000:3000"
+      - "5000:3000"
+    volumes:
+      - type: volume
+        source: webvol
+        target: /home/app
+        volume:
+          nocopy: true
+volumes:
+  webvol:
+    external: true
