@@ -8,11 +8,7 @@ services:
     ports:
       - "5000:3000"
     volumes:
-      - type: volume
-        source: webvol
-        target: /home/app
-        volume:
-          nocopy: true
+      - nvdvol:/home/app
 volumes:
-  webvol:
+  nvdvol:
     external: true

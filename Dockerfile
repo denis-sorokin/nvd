@@ -29,10 +29,11 @@ RUN apt-get update && apt-get install --no-install-recommends yarn
 ENV PATH "$(yarn global bin):$PATH"
 
 WORKDIR /home/app
-RUN ls
-
+COPY package*.json ./
 # log dir
 VOLUME /var/log/log
+
+RUN yarn
 
 # Bundle app source
 COPY . /home/app
@@ -53,7 +54,6 @@ done" > get_data.sh
 
 RUN bash get_data.sh
 # Install app dependencies
-RUN yarn
 CMD ["yarn", "dev"]
 
 #RUN yarn dev
