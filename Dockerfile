@@ -36,10 +36,27 @@ VOLUME /var/log/log
 
 # Bundle app source
 COPY . /var/www
-# Install app dependencies
-RUN yarn
+RUN mkdir /var/www/cache
 
-EXPOSE  3000
- CMD ["yarn", "dev"]
+RUN touch get_data.sh
+RUN echo '=============='
+RUN echo 'start download'
+RUN echo '=============='
+RUN echo "#!/bin/bash
+YEAR=2002 \
+CURRENT=`date +%Y` \
+while [ $YEAR -ne $CURRENT ]; do \
+   curl -LO https://nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-'$YEAR'.json.zip
+   unzip
+   YEAR=$(($YEAR+1)) \
+done" > get_data.sh
+
+CMD ["cat", "get_data.sh"]
+CMD ["ls"]
+# Install app dependencies
+#RUN yarn
+
+#EXPOSE  3000
+#CMD ["yarn", "dev"]
 
 #RUN yarn dev
