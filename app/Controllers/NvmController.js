@@ -7,7 +7,7 @@ class NvmController {
 
   getData(Req, Res) {
     let files_arr = [];
-    Res.send('123!');
+    Res.send('357!');
     return;
     try {
       fs.readdir('./cache', (err, files) => {

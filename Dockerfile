@@ -8,7 +8,7 @@ RUN apt-get update --fix-missing
 RUN apt-get install -y curl apt-utils apt-transport-https
 RUN apt-get install -y build-essential libssl-dev
 
-RUN mkdir /usr/local/nvm
+RUN mkdir /usr/local/nvm && mkdir /home/app
 
 ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 8.11.3
@@ -30,8 +30,6 @@ ENV PATH "$(yarn global bin):$PATH"
 
 WORKDIR /home/app
 COPY package*.json ./
-# log dir
-VOLUME /var/log/log
 
 RUN yarn
 
@@ -53,6 +51,9 @@ while [ $YEAR -ne $CURRENT ]; do \
 done" > get_data.sh
 
 RUN bash get_data.sh
+
+EXPOSE 5000
+
 # Install app dependencies
 CMD ["yarn", "dev"]
 

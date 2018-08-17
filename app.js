@@ -4,7 +4,6 @@ var path = require('path');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var nvmRouter = require('./routes/nvm');
 
 var app = express();
 
@@ -24,7 +23,7 @@ app.use(function (req, res, next)
 
 
 // app.use('/', indexRouter);
-app.use(nvmRouter);
+app.use(indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
