@@ -1,7 +1,11 @@
+require('dotenv').config({path: './.env'});
 var createError = require('http-errors');
 var express = require('express');
+const bodyParser = require('body-parser');
 var path = require('path');
 var logger = require('morgan');
+const schedule = require('node-schedule');
+const nvdRoutine = require('./app/utils/nvdScheduleRoutine');
 
 var indexRouter = require('./routes/index');
 
@@ -21,17 +25,16 @@ app.use(function (req, res, next)
   next();
 });
 
+app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
 
 // app.use('/', indexRouter);
 app.use(indexRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
 // error handler
 app.use(function(err, req, res) {
+  console.error(err.url, err.method, err.statusCode, err.statusMessage);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -41,9 +44,12 @@ app.use(function(err, req, res) {
   res.render('error');
 });
 
+// scheduler
+schedule.scheduleJob(process.env.SCHEDULE, nvdRoutine('some args in nvd'));
+
 const port = process.env.PORT || 3000;
 app.listen(port, function () {
-  console.log(`App running on ${port}\nhttp://localhost:${port}`);
+  console.log(`App running on ${port}\nhttp://localhost:5000`);
 });
 
 module.exports = app;

@@ -3,17 +3,42 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "ntl -d",
+    "dev": "nodemon app.js",
+    "pm:start": "pm2 start app.js --name 'check_nvd'",
+    "pm:stop": "pm2 delete 'check_nvd'",
+    "pm:restart": "npm run pm:stop && npm run pm:start"
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "dotenv": "^6.0.0",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
+    "moment": "^2.22.2",
     "morgan": "~1.9.0",
-    "nodemon": "^1.18.3"
+    "mysql2": "^1.6.1",
+    "node-schedule": "^1.3.0",
+    "nodemon": "^1.18.3",
+    "pm2": "^3.0.4",
+    "sequelize": "^4.38.0"
+  },
+  "ntl": {
+    "descriptions": {
+      "start": "show tasks list cli menu",
+      "dev": "run nodemon for development in local environment",
+      "start:staging": "start pm2 staging daemon",
+      "stop:staging": "stop pm2 staging daemon",
+      "restart:staging": "restart pm2 staging daemon",
+      "start:prod": "start pm2 production daemon",
+      "stop:prod": "stop pm2 production daemon",
+      "restart:prod": "restart pm2 production daemon"
+    }
+  },
+  "devDependencies": {
+    "ntl": "^3.0.0"
   }
 }

@@ -1,12 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var nvmRouter = require('./routes/nvm');
+const NvdController = require('../app/controllers/NvdController');
 
 /* GET home page. */
 router.get('/', function(req, res) {
   res.send({msg: 'App in development.'});
 });
-router.get('/nvm', nvmRouter.getData);
+
+/* GET nvd */
+router.get('/nvd', NvdController.getData.bind(NvdController));
 
 module.exports = router;

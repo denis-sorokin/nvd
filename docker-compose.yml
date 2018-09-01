@@ -7,8 +7,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:3000"
-    volumes:
-      - nvdvol:/home/app
-volumes:
-  nvdvol:
-    external: true

@@ -22,4 +22,4 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 docker volume create --name=nvdvol
 
-docker-compose up --build --no-deps
+docker-compose up --build
