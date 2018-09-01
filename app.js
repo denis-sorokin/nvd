@@ -32,18 +32,6 @@ app.use(bodyParser.raw());
 // app.use('/', indexRouter);
 app.use(indexRouter);
 
-// error handler
-app.use(function(err, req, res) {
-  console.error(err.url, err.method, err.statusCode, err.statusMessage);
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
 // scheduler
 schedule.scheduleJob(process.env.SCHEDULE, nvdRoutine('some args in nvd'));
 

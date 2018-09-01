@@ -1,8 +1,13 @@
+const moment = require('moment');
+const zip = new require('node-zip');
+
+/* actions */
+const downloadArchives = require('./downloadArchives');
+
 /*
     CONSTANTS
 */
-const { ERRORS } = require('../constants');
-const moment = require('moment');
+const { ERRORS, NOTIFY } = require('../constants');
 
 let args;
 
@@ -20,9 +25,22 @@ const scheduleJob = async function(fireDate) {
 };
 
 const checkNewsFromNvd = async (fireDate) => {
+    const startYear = 2002;
+    const currentYear = (new Date).getFullYear();
+
     try {
-        console.log('Hello, from schedule task')
+        try {
+            downloadArchives({ startYear, currentYear })
+                .then(e => {
+                    console.log(NOTIFY.DOWNLOAD_ARCHIVES, e.join('\n'));
+                })
+                .catch(e => {
+                    console.error(e);
+                })
+        } catch (e) {
+            console.error(ERRORS.CONSOLE.UNKNOWN_GET_ERROR, e)
+        }
     } catch (error) {
-        console.error('Error in tryCatch checkNewsFromNvd: ', error);
+        console.error(`${ERRORS.CONSOLE.ERROR_TRY_CATCH} checkNewsFromNvd`, error);
     }
 };
