@@ -1,5 +1,4 @@
 const moment = require('moment');
-const zip = new require('node-zip');
 
 /* actions */
 const downloadArchives = require('./downloadArchives');
@@ -30,6 +29,7 @@ const checkNewsFromNvd = async (fireDate) => {
 
     try {
         try {
+            // download archives from nvd
             downloadArchives({ startYear, currentYear })
                 .then(e => {
                     console.log(NOTIFY.DOWNLOAD_ARCHIVES, e.join('\n'));

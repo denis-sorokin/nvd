@@ -9,6 +9,9 @@ router.get('/', function(req, res) {
 });
 
 /* GET nvd */
-router.get('/nvd', NvdController.getData.bind(NvdController));
+router.get('/nvd', NvdController.getList.bind(NvdController));
+
+/* GET data by year */
+router.get('/nvd/:year', NvdController.getDataByYear.bind(NvdController));
 
 module.exports = router;
