@@ -22,6 +22,10 @@ module.exports = async function ({ startYear, currentYear }) {
                         }
 
                         fs.writeFileSync(`./zip_cache/${i}.json.zip`, e.data, 'binary');
+                        const zip = new require('node-zip')(e.data);
+                        const fileInArchive = zip.files[Object.keys(zip.files)[0]];
+                        const raw = new Buffer(fileInArchive._data.getContent());
+                        console.log(JSON.parse(raw.toString()))
                     });
                     checkDownload.push(i);
                 })

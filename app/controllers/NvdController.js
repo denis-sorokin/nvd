@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 const { ERRORS } = require('../constants');
 
@@ -7,7 +8,7 @@ class NvdController {
         this.startYear = 2002
     }
 
-    async getList(Request, Response, next) {
+    async getList(Request, Response, year=null) {
         let files_arr = [];
         try {
             fs.readdir('./zip_cache', (err, files) => {
@@ -28,10 +29,12 @@ class NvdController {
     async getDataByYear(Request, Response, next) {
         try {
             const { year } = Request.params;
-            const zip = new require('node-zip')(`${process.env.DOWNLOAD_FOLDER}${year}.json.zip`);
-
-            // const data = zip.files[`${process.env.DOWNLOAD_FOLDER}${year}.json.zip`]
-            console.log(zip)
+            fs.readFile(`${process.env.DOWNLOAD_FOLDER}${year}.json.zip`, (err, data) => {
+                const zip = new require('node-zip')(data);
+                const fileInArchive = zip.files[Object.keys(zip.files)[0]];
+                const raw = new Buffer(fileInArchive._data.getContent());
+                Response.send(JSON.parse(raw.toString()), 200)
+            });
         } catch (e) {
             console.error(ERRORS.CONSOLE.NOT_FOUND_THIS_YEAR, e)
         }
