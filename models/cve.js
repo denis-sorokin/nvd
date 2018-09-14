@@ -1,5 +1,5 @@
 'use strict';
-const {LANG} = require('../../constants');
+const {LANG} = require('../app/constants');
 
 module.exports = (sequelize, DataTypes) => {
     const Cve = sequelize.define('Cve', {
@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         lastModifiedDate: DataTypes.DATE
     }, {});
     Cve.associate = function (models) {
-        Cve.belongsTo(models.Impact);
-        Cve.belongsTo(models.Configuration);
-        Cve.belongsTo(models.Reference);
-        Cve.belongsTo(models.Vendor);
+        Cve.belongsTo(models.Impact, {as: 'ImpactId'});
+        Cve.belongsTo(models.Configuration, {as: 'ConfigurationId'});
+        Cve.belongsTo(models.Reference, {as: 'ReferenceId'});
+        Cve.belongsTo(models.Vendor, {as: 'VendorId'});
     };
 
     Cve.sync();
