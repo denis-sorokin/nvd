@@ -25,8 +25,6 @@ const jsonData = JSON.stringify({
     }
 );
 
-console.log(jsonData);
-
 module.exports = function () {
     fs.writeFileSync('config/config.json', jsonData);
 };

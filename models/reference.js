@@ -6,8 +6,10 @@ module.exports = (sequelize, DataTypes) => {
         refsource: DataTypes.STRING
     }, {});
     Reference.associate = function (models) {
-        Reference.hasMany(models.Tag);
+        Reference.hasMany(models.Tag, {as: 'Tags'});
     };
+
     Reference.sync();
+
     return Reference;
 };

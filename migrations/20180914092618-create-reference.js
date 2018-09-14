@@ -24,6 +24,15 @@ module.exports = {
 			updatedAt: {
 				allowNull: false,
 				type: Sequelize.DATE
+			},
+			Tags: {
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'Tags',
+					key: 'id'
+				},
+				onUpdate: 'CASCADE',
+				onDelete: 'SET NULL',
 			}
 		});
 	},

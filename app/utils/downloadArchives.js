@@ -27,8 +27,8 @@ module.exports = async function ({ startYear, currentYear }) {
                         const fileInArchive = zip.files[Object.keys(zip.files)[0]];
                         const raw = new Buffer(fileInArchive._data.getContent());
                         const json = JSON.parse(raw.toString());
-                        db.cve.create()
-
+                        // db.cve.create()
+                        return json;
                     });
                     checkDownload.push(i);
                 })
