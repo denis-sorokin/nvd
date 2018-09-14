@@ -1,5 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
+const db = require('../../models');
 
 /*
     CONSTANTS
@@ -25,7 +26,9 @@ module.exports = async function ({ startYear, currentYear }) {
                         const zip = new require('node-zip')(e.data);
                         const fileInArchive = zip.files[Object.keys(zip.files)[0]];
                         const raw = new Buffer(fileInArchive._data.getContent());
-                        console.log(JSON.parse(raw.toString()))
+                        const json = JSON.parse(raw.toString());
+                        db.cve.create()
+
                     });
                     checkDownload.push(i);
                 })

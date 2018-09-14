@@ -9,4 +9,4 @@ const sequelize = new Sequelize(
         }
     });
 
-module.exports.database = sequelize;
+module.exports = sequelize;

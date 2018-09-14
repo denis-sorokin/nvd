@@ -1,9 +1,12 @@
 require('dotenv').config({path: './.env'});
-var createError = require('http-errors');
 var express = require('express');
 const bodyParser = require('body-parser');
 var path = require('path');
 var logger = require('morgan');
+
+const createDataBaseConfig = require('./config');
+createDataBaseConfig();
+
 const schedule = require('node-schedule');
 const nvdRoutine = require('./app/utils/nvdScheduleRoutine');
 

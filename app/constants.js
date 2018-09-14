@@ -1,4 +1,9 @@
 module.exports = {
+    LANG: [
+        'ru',
+        'en',
+        'de'
+    ],
     ERRORS: {
         CONSOLE: {
             AXIOS_GET_ERROR: 'Error axios GET\n',

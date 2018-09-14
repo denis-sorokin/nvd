@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "ntl -d",
-    "dev": "nodemon app.js",
-    "pm:start": "pm2 start app.js --name 'check_nvd'",
+    "dev": "nodemon app.js --ignore 'config/*'",
+    "pm:start": "pm2 start app.js --ignore 'config/*' --name 'check_nvd'",
     "pm:stop": "pm2 delete 'check_nvd'",
     "pm:restart": "npm run pm:stop && npm run pm:start"
   },
@@ -16,6 +16,7 @@
     "debug": "~2.6.9",
     "dotenv": "^6.0.0",
     "express": "~4.16.0",
+    "global": "^4.3.2",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "moment": "^2.22.2",
@@ -25,7 +26,8 @@
     "node-zip": "^1.1.1",
     "nodemon": "^1.18.3",
     "pm2": "^3.0.4",
-    "sequelize": "^4.38.0"
+    "sequelize": "^4.38.1",
+    "sequelize-cli": "^4.1.1"
   },
   "ntl": {
     "descriptions": {
