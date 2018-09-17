@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         value: DataTypes.STRING
     }, {});
     Tag.associate = function (models) {
-        // associations can be defined here
+	    Tag.belongsToMany(models.Reference, {as: 'References', through: 'Reference_Tags', foreignKey: 'tagId' });
     };
     Tag.sync();
     return Tag;

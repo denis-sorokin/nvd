@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         refsource: DataTypes.STRING
     }, {});
     Reference.associate = function (models) {
-        Reference.hasMany(models.Tag, {as: 'Tags'});
+        Reference.belongsToMany(models.Tag, {as: 'Tags', through: 'Reference_Tags', foreignKey: 'refId' });
     };
 
     Reference.sync();

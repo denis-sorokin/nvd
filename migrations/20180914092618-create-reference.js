@@ -6,7 +6,7 @@ module.exports = {
 				allowNull: false,
 				autoIncrement: true,
 				primaryKey: true,
-				type: Sequelize.INTEGER
+				type: Sequelize.INTEGER.UNSIGNED
 			},
 			url: {
 				type: Sequelize.STRING
@@ -17,6 +17,15 @@ module.exports = {
 			refsource: {
 				type: Sequelize.STRING
 			},
+			// Tags: {
+			// 	type: Sequelize.INTEGER,
+			// 	references: {
+			// 		model: 'Reference_Tag',
+			// 		key: 'tagId'
+			// 	},
+			// 	onUpdate: 'CASCADE',
+			// 	onDelete: 'SET NULL',
+			// },
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE
@@ -24,15 +33,6 @@ module.exports = {
 			updatedAt: {
 				allowNull: false,
 				type: Sequelize.DATE
-			},
-			Tags: {
-				type: Sequelize.INTEGER,
-				references: {
-					model: 'Tags',
-					key: 'id'
-				},
-				onUpdate: 'CASCADE',
-				onDelete: 'SET NULL',
 			}
 		});
 	},

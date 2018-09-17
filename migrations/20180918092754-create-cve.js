@@ -10,37 +10,18 @@ module.exports = {
 		        primaryKey: true,
 		        type: Sequelize.INTEGER
 	        },
-	        nvdId: {
-		        type: Sequelize.STRING,
-		        unique: true
-	        },
+	        id_meta: Sequelize.INTEGER,
+	        year: Sequelize.INTEGER,
+	        type: Sequelize.STRING,
+	        format: Sequelize.STRING,
+	        version: Sequelize.FLOAT,
 	        assigner: {
 		        type: Sequelize.STRING
-	        },
-	        description: {
-		        type: Sequelize.STRING
-	        },
-	        descriptionLang: {
-		        type: Sequelize.ENUM(LANG)
-	        },
-	        problem: {
-		        type: Sequelize.STRING
-	        },
-	        problemLang: {
-		        type: Sequelize.ENUM(LANG)
 	        },
 	        publishedDate: {
 		        type: Sequelize.DATE
 	        },
 	        lastModifiedDate: {
-		        type: Sequelize.DATE
-	        },
-	        createdAt: {
-		        allowNull: false,
-		        type: Sequelize.DATE
-	        },
-	        updatedAt: {
-		        allowNull: false,
 		        type: Sequelize.DATE
 	        },
 	        ImpactId: {
@@ -62,7 +43,7 @@ module.exports = {
 		        onDelete: 'SET NULL',
 	        },
 	        ReferenceId: {
-		        type: Sequelize.INTEGER,
+		        type: Sequelize.INTEGER.UNSIGNED,
 		        references: {
 			        model: 'References',
 			        key: 'id'
@@ -78,6 +59,32 @@ module.exports = {
 		        },
 		        onUpdate: 'CASCADE',
 		        onDelete: 'SET NULL',
+	        },
+	        DescriptionId: {
+		        type: Sequelize.INTEGER,
+		        references: {
+			        model: 'Descriptions',
+			        key: 'id'
+		        },
+		        onUpdate: 'CASCADE',
+		        onDelete: 'SET NULL',
+	        },
+	        ProblemId: {
+		        type: Sequelize.INTEGER,
+		        references: {
+			        model: 'Problems',
+			        key: 'id'
+		        },
+		        onUpdate: 'CASCADE',
+		        onDelete: 'SET NULL',
+	        },
+	        createdAt: {
+		        allowNull: false,
+		        type: Sequelize.DATE
+	        },
+	        updatedAt: {
+		        allowNull: false,
+		        type: Sequelize.DATE
 	        }
         });
     },

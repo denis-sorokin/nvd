@@ -1,11 +1,10 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
     const Vendor = sequelize.define('Vendor', {
-        name: {
+	    name: {
             type: DataTypes.STRING,
             unique: true
         },
-        product: DataTypes.STRING,
         version: DataTypes.STRING
     }, {});
     Vendor.associate = function (models) {

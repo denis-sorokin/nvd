@@ -29,32 +29,14 @@ module.exports = {
 			userInteractionRequired: {
 				type: Sequelize.BOOLEAN
 			},
-			cvssVers: {
-				type: Sequelize.STRING
-			},
-			cvssVectorString: {
-				type: Sequelize.STRING
-			},
-			cvssAccessVector: {
-				type: Sequelize.STRING
-			},
-			cvssAccessComplexity: {
-				type: Sequelize.STRING
-			},
-			cvssAuthentication: {
-				type: Sequelize.STRING
-			},
-			cvssConfidentialityImpact: {
-				type: Sequelize.STRING
-			},
-			cvssIntegrityImpact: {
-				type: Sequelize.STRING
-			},
-			cvssAvailabilityImpact: {
-				type: Sequelize.STRING
-			},
-			cvssBaseScore: {
-				type: Sequelize.STRING
+			CvssId: {
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'ImpactCvsses',
+					key: 'id'
+				},
+				onUpdate: 'CASCADE',
+				onDelete: 'SET NULL',
 			},
 			createdAt: {
 				allowNull: false,

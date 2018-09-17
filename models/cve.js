@@ -1,17 +1,17 @@
 'use strict';
-const {LANG} = require('../app/constants');
 
 module.exports = (sequelize, DataTypes) => {
     const Cve = sequelize.define('Cve', {
-        nvdId: {
-            type: DataTypes.STRING,
-            unique: true
-        },
-        assigner: DataTypes.STRING,
-        description: DataTypes.STRING,
-        descriptionLang: DataTypes.ENUM(LANG),
-        problem: DataTypes.STRING,
-        problemLang: DataTypes.ENUM(LANG),
+	    id_meta: DataTypes.INTEGER,
+	    year: DataTypes.INTEGER,
+	    assigner: DataTypes.STRING,
+	    type: DataTypes.STRING,
+	    format: DataTypes.STRING,
+	    version: DataTypes.FLOAT,
+	    // description: DataTypes.STRING,
+        // descriptionLang: DataTypes.ENUM(LANG),
+        // problem: DataTypes.STRING,
+        // problemLang: DataTypes.ENUM(LANG),
         publishedDate: DataTypes.DATE,
         lastModifiedDate: DataTypes.DATE
     }, {});
@@ -19,7 +19,9 @@ module.exports = (sequelize, DataTypes) => {
         Cve.belongsTo(models.Impact, {as: 'ImpactId'});
         Cve.belongsTo(models.Configuration, {as: 'ConfigurationId'});
         Cve.belongsTo(models.Reference, {as: 'ReferenceId'});
-        Cve.belongsTo(models.Vendor, {as: 'VendorId'});
+	    Cve.belongsTo(models.Vendor, {as: 'VendorId'});
+	    Cve.belongsTo(models.Description, {as: 'DescriptionId'});
+	    Cve.belongsTo(models.Problem, {as: 'ProblemId'});
     };
 
     Cve.sync();
