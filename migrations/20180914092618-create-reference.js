@@ -17,7 +17,7 @@ module.exports = {
 			refsource: {
 				type: Sequelize.STRING
 			},
-			// Tags: {
+			// tags: {
 			// 	type: Sequelize.INTEGER,
 			// 	references: {
 			// 		model: 'Reference_Tag',

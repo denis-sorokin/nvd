@@ -1,6 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
-const db = require('../../models');
+const saveCveToDatabase = require('./saveCveToDatabase');
 
 /*
     CONSTANTS
@@ -28,6 +28,10 @@ module.exports = async function ({ startYear, currentYear }) {
                         const raw = new Buffer(fileInArchive._data.getContent());
                         const json = JSON.parse(raw.toString());
                         // db.cve.create()
+
+                        json.CVE_Items.forEach(async cve => {
+	                        saveCveToDatabase.save(cve);
+                        });
                         return json;
                     });
                     checkDownload.push(i);

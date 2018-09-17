@@ -2,16 +2,12 @@
 
 module.exports = (sequelize, DataTypes) => {
     const Cve = sequelize.define('Cve', {
-	    id_meta: DataTypes.INTEGER,
+	    idMeta: DataTypes.INTEGER,
 	    year: DataTypes.INTEGER,
 	    assigner: DataTypes.STRING,
 	    type: DataTypes.STRING,
 	    format: DataTypes.STRING,
 	    version: DataTypes.FLOAT,
-	    // description: DataTypes.STRING,
-        // descriptionLang: DataTypes.ENUM(LANG),
-        // problem: DataTypes.STRING,
-        // problemLang: DataTypes.ENUM(LANG),
         publishedDate: DataTypes.DATE,
         lastModifiedDate: DataTypes.DATE
     }, {});

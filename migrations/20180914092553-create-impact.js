@@ -29,7 +29,7 @@ module.exports = {
 			userInteractionRequired: {
 				type: Sequelize.BOOLEAN
 			},
-			CvssId: {
+			cvssId: {
 				type: Sequelize.INTEGER,
 				references: {
 					model: 'ImpactCvsses',

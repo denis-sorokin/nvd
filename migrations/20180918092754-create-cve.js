@@ -10,7 +10,7 @@ module.exports = {
 		        primaryKey: true,
 		        type: Sequelize.INTEGER
 	        },
-	        id_meta: Sequelize.INTEGER,
+	        idMeta: Sequelize.INTEGER,
 	        year: Sequelize.INTEGER,
 	        type: Sequelize.STRING,
 	        format: Sequelize.STRING,

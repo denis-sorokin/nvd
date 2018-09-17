@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         userInteractionRequired: DataTypes.BOOLEAN,
     }, {});
     Impact.associate = function (models) {
-	    Impact.belongsTo(models.ImpactCvss, {as: 'CvssId'});
+	    Impact.belongsTo(models.ImpactCvss, {as: 'cvssId'});
     };
     Impact.sync();
     return Impact;
