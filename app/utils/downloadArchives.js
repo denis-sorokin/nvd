@@ -31,8 +31,8 @@ module.exports = async function ({ startYear, currentYear }) {
 
 	                    try {
 		                    chunk(json.CVE_Items, 35).forEach(cve => {
-		                    	cve.forEach(async el => {
-				                    await saveCveToDatabase.save(el);
+		                    	cve.forEach(el => {
+				                    saveCveToDatabase.save(el);
 			                    });
 		                    });
 	                    } catch (e) {

@@ -15,8 +15,11 @@ module.exports = {
 		try {
 			// write Impact
 			try {
+				let ImpactCvssTemp = null;
+				let ImpactTemp = null;
+
 				if (data.impact.baseMetricV2) {
-					db.ImpactCvss.create({
+					ImpactCvssTemp = db.ImpactCvss.create({
 						vers: data.impact.baseMetricV2.cvssV2.version,
 						vectorString: data.impact.baseMetricV2.cvssV2.vectorString,
 						accessVector: data.impact.baseMetricV2.cvssV2.accessVector,
@@ -26,30 +29,30 @@ module.exports = {
 						integrityImpact: data.impact.baseMetricV2.cvssV2.integrityImpact,
 						availabilityImpact: data.impact.baseMetricV2.cvssV2.availabilityImpact,
 						baseScore: data.impact.baseMetricV2.cvssV2.baseScore
-					}).then(e => {
-						 db.Impact.create({
-							severity: data.impact.baseMetricV2.severity,
-							exploitabilityScore: data.impact.baseMetricV2.exploitabilityScore,
-							impactScore: data.impact.baseMetricV2.impactScore,
-							obtainAllPrivilege: data.impact.baseMetricV2.obtainAllPrivilege,
-							obtainUserPrivilege: data.impact.baseMetricV2.obtainUserPrivilege,
-							obtainOtherPrivilege: data.impact.baseMetricV2.obtainOtherPrivilege,
-							userInteractionRequired: data.impact.baseMetricV2.userInteractionRequired,
-							cvssId: e.get().id
-						 }).then(e => {
-						 	writeImpactV2 = e.get().id;
-						}).catch(err => {
-							 console.log('=====\nError write IMPACT_v2 to database\n=====\n');
-							 console.error(err);
-						});
 					}).catch(err => {
 						console.log('=====\nError write IMPACT_CVSS_v2 to database\n=====\n');
 						console.error(err);
 					});
+
+					ImpactTemp = db.Impact.create({
+						severity: data.impact.baseMetricV2.severity,
+						exploitabilityScore: data.impact.baseMetricV2.exploitabilityScore,
+						impactScore: data.impact.baseMetricV2.impactScore,
+						obtainAllPrivilege: data.impact.baseMetricV2.obtainAllPrivilege,
+						obtainUserPrivilege: data.impact.baseMetricV2.obtainUserPrivilege,
+						obtainOtherPrivilege: data.impact.baseMetricV2.obtainOtherPrivilege,
+						userInteractionRequired: data.impact.baseMetricV2.userInteractionRequired,
+						cvssId: ImpactCvssTemp.get().id
+					}).catch(err => {
+						console.log('=====\nError write IMPACT_v2 to database\n=====\n');
+						console.error(err);
+					});
+
+					writeImpactV2 = ImpactTemp.get().id;
 				}
 
 				if (data.impact.baseMetricV3) {
-					 db.ImpactCvss.create({
+					ImpactCvssTemp = db.ImpactCvss.create({
 						vers: data.impact.baseMetricV3.cvssV3.version,
 						vectorString: data.impact.baseMetricV3.cvssV3.vectorString,
 						accessVector: data.impact.baseMetricV3.cvssV3.attackVector,
@@ -59,21 +62,21 @@ module.exports = {
 						integrityImpact: data.impact.baseMetricV3.cvssV3.integrityImpact,
 						availabilityImpact: data.impact.baseMetricV3.cvssV3.availabilityImpact,
 						baseScore: data.impact.baseMetricV3.cvssV3.baseScore
-					}).then(e => {
-						db.Impact.create({
-							exploitabilityScore: data.impact.baseMetricV3.exploitabilityScore,
-							impactScore: data.impact.baseMetricV3.impactScore,
-							cvssId: e.get().id
-						}).then(e => {
-							writeImpactV3 = e.get().id
-						}).catch(err => {
-							console.log('=====\nError write IMPACT_v3 to database\n=====\n');
-							console.error(err);
-						});
 					}).catch(err => {
-						 console.log('=====\nError write IMPACT_CVSS_v3 to database\n=====\n');
-						 console.error(err);
+						console.log('=====\nError write IMPACT_CVSS_v3 to database\n=====\n');
+						console.error(err);
 					});
+
+					ImpactTemp = db.Impact.create({
+						exploitabilityScore: data.impact.baseMetricV3.exploitabilityScore,
+						impactScore: data.impact.baseMetricV3.impactScore,
+						cvssId: ImpactCvssTemp.get().id
+					}).catch(err => {
+						console.log('=====\nError write IMPACT_v3 to database\n=====\n');
+						console.error(err);
+					});
+
+					writeImpactV3 = ImpactTemp.get().id;
 				}
 			} catch (e) {
 				console.log('=====\nError write IMPACT to database\n=====\n');
@@ -82,26 +85,31 @@ module.exports = {
 
 			// write Configurations
 			try {
+				let configurationTemp = null;
 				const cveVers = data.configurations.CVE_data_version;
 
 				if (data.configurations.nodes && data.configurations.nodes[0]
 					&& data.configurations.nodes[0].cpe && data.configurations.nodes[0].cpe[0]) {
 					data.configurations.nodes[0].cpe.forEach(conf => {
-						 db.Configuration.create({
+						configurationTemp = db.Configuration.create({
 							cveVers,
 							cpeVulnerable: conf.vulnerable,
 							cpe22Uri: conf.cpe22Uri,
 							cpe23Uri: conf.cpe23Uri
-						}).then(e => {
-							 writeConfiguration.push(e.get().id)
-						 });
+						}).catch(err => {
+							console.error(err);
+						});
+
+						writeConfiguration.push(configurationTemp.get().id)
 					})
 				} else {
-					db.Configuration.create({
+					configurationTemp = db.Configuration.create({
 						cveVers
-					}).then(e => {
-						writeConfiguration.push(e.get().id)
+					}).catch(err => {
+						console.error(err);
 					});
+
+					writeConfiguration.push(configurationTemp.get().id)
 				}
 			} catch (e) {
 				console.log('=====\nError write CONFIGURATIONS to database\n=====\n');
@@ -110,13 +118,17 @@ module.exports = {
 
 			// write Description
 			try {
+				let desription = null;
+
 				data.cve.description.description_data.forEach(description => {
-					db.Description.create({
+					desription = db.Description.create({
 						lang: description.lang,
 						value: description.value
-					}).then(e => {
-						writeDescription.push(e.get().id);
+					}).catch(err => {
+						console.error(err);
 					});
+
+					writeDescription.push(desription.get().id);
 				});
 			} catch (e) {
 				console.log('=====\nError write DESCRIPTION to database\n=====\n');
@@ -126,30 +138,37 @@ module.exports = {
 			// write References
 			try {
 				data.cve.references.reference_data.forEach(reference => {
+					let tagTemp = null;
+					let refTemp = null;
 					let tags = [];
 
 					// write TAGs
 					try {
 						reference.tags.forEach(tag => {
-							db.Tag.create({
+							tagTemp = db.Tag.create({
 								value: tag
-							}).then(e => {
-								tags.push(e.get().id);
+							}).catch(err => {
+								console.error(err);
 							});
+
+							tags.push(tagTemp.get().id);
+
 						});
 					} catch (e) {
 						console.log('=====\nError write TAG to database\n=====\n');
 						console.error(e);
 					}
 
-					db.Reference.create({
+					refTemp = db.Reference.create({
 						url: reference.url,
 						name: reference.name,
 						refsource: reference.refsource,
 						tags: tags.join(',')
-					}).then(e => {
-						writeReference.push(e.get().id);
+					}).catch(err => {
+						console.error(err);
 					});
+
+					writeReference.push(refTemp.get().id);
 				});
 			} catch (e) {
 				console.log('=====\nError write REFERENCE to database\n=====\n');
@@ -158,13 +177,17 @@ module.exports = {
 
 			// write Problem
 			try {
+				let problem = null;
+
 				if (data.cve.problemtype.problemtype_data[0].description[0]) {
-					db.Problem.create({
+					problem = db.Problem.create({
 						lang: data.cve.problemtype.problemtype_data[0].description[0].lang,
 						value: data.cve.problemtype.problemtype_data[0].description[0].value
-					}).then(e => {
-						writeProblem = e.get().id
+					}).catch(err => {
+						console.error(err);
 					});
+
+					writeProblem = problem.get().id
 				}
 			} catch (e) {
 				console.log('=====\nError write PROBLEM to database\n=====\n');
@@ -173,6 +196,8 @@ module.exports = {
 
 			// write Vendor product
 			try {
+				let vendor = null;
+
 				data.cve.affects.vendor.vendor_data.forEach(vendor => {
 					vendor.product.product_data.forEach(product => {
 						let versions = [];
@@ -180,12 +205,14 @@ module.exports = {
 							versions.push(vers);
 						});
 
-						db.Vendor.create({
+						vendor = db.Vendor.create({
 							name: product.product_name,
 							version: versions.join(',')
-						}).then(e => {
-							writeVendor.push(e.get().id);
+						}).catch(err => {
+							console.error(err);
 						});
+
+						writeVendor.push(vendor.get().id);
 					})
 				});
 			} catch (e) {
@@ -206,7 +233,7 @@ module.exports = {
 					ConfigurationId: writeConfiguration.join(','),
 					ReferenceId: writeReference.join(','),
 					DescriptionId: writeDescription.join(','),
-					ProblemId: writeProblem? writeProblem.id : null,
+					ProblemId: writeProblem ? writeProblem.id : null,
 					publishedDate: data.publishedDate,
 					lastModifiedDate: data.lastModifiedDate
 				}).then(el => {
@@ -216,7 +243,7 @@ module.exports = {
 				console.log('=====\nError write CVE to database\n=====\n');
 				console.error(e);
 			}
-		}  catch (e) {
+		} catch (e) {
 			console.log('=====\nError write to database\n=====\n');
 			console.error(e);
 		}
