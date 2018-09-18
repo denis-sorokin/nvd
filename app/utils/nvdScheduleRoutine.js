@@ -30,13 +30,14 @@ const checkNewsFromNvd = async (fireDate) => {
     try {
         try {
             // download archives from nvd
-            downloadArchives({ startYear, currentYear })
-                .then(e => {
-                    console.log(NOTIFY.DOWNLOAD_ARCHIVES, e.join('\n'));
-                })
-                .catch(e => {
-                    console.error(e);
-                })
+            console.log('faker download archive')
+            // downloadArchives({ startYear, currentYear })
+            //     .then(e => {
+            //         console.log(NOTIFY.DOWNLOAD_ARCHIVES, e.join('\n'));
+            //     })
+            //     .catch(e => {
+            //         console.error(e);
+            //     })
         } catch (e) {
             console.error(ERRORS.CONSOLE.UNKNOWN_GET_ERROR, e)
         }

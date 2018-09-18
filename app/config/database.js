@@ -6,7 +6,15 @@ const sequelize = new Sequelize(
         dialect: process.env.DB_DIALECT,
         define: {
             timestamps: false,
-        }
+        },
+	    pool: {
+		    max: 5,
+		    min: 1,
+		    idle: 90000
+	    },
+	    dialectOptions: {
+		    requestTimeout: 5000
+	    }
     });
 
 module.exports = sequelize;

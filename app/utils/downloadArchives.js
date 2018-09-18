@@ -1,5 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
+const { chunk } = require('lodash');
 const saveCveToDatabase = require('./saveCveToDatabase');
 
 /*
@@ -27,11 +28,17 @@ module.exports = async function ({ startYear, currentYear }) {
                         const fileInArchive = zip.files[Object.keys(zip.files)[0]];
                         const raw = new Buffer(fileInArchive._data.getContent());
                         const json = JSON.parse(raw.toString());
-                        // db.cve.create()
 
-                        json.CVE_Items.forEach(async cve => {
-	                        saveCveToDatabase.save(cve);
-                        });
+	                    try {
+		                    chunk(json.CVE_Items, 35).forEach(cve => {
+		                    	cve.forEach(async el => {
+				                    await saveCveToDatabase.save(el);
+			                    });
+		                    });
+	                    } catch (e) {
+		                    console.log('=====\nError save data to database\n=====\n');
+		                    console.error(e);
+	                    }
                         return json;
                     });
                     checkDownload.push(i);
