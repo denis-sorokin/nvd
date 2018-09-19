@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
 	    pool: {
 		    max: 5,
 		    min: 1,
-		    idle: 10000
+		    idle: 1000
 	    },
 	    dialectOptions: {
 		    requestTimeout: 5000

@@ -20,7 +20,7 @@ const scheduleJob = async function(fireDate) {
     console.log(`SCHEDULER _ TIME ${moment(fireDate).format('DD/MM/YYYY HH:mm')}`);
     console.log('========');
 
-    await checkNewsFromNvd(fireDate);
+    // await checkNewsFromNvd(fireDate);
 };
 
 const checkNewsFromNvd = async (fireDate) => {

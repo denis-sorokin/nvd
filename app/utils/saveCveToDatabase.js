@@ -85,23 +85,27 @@ module.exports = {
 
 			// write Configurations
 			try {
-				let configurationTemp = null;
 				const cveVers = data.configurations.CVE_data_version;
+				let configsBulk = [];
 
 				if (data.configurations.nodes && data.configurations.nodes[0]
 					&& data.configurations.nodes[0].cpe && data.configurations.nodes[0].cpe[0]) {
 					data.configurations.nodes[0].cpe.forEach(conf => {
-						configurationTemp = db.Configuration.create({
+						configsBulk.push({
 							cveVers,
 							cpeVulnerable: conf.vulnerable,
 							cpe22Uri: conf.cpe22Uri,
 							cpe23Uri: conf.cpe23Uri
-						}).catch(err => {
+						});
+					});
+
+					const configs = db.Configuration.bulkCreate(configsBulk)
+						.catch(err => {
 							console.error(err);
 						});
 
-						writeConfiguration.push(configurationTemp.get().id)
-					})
+					console.log(configs);
+					writeConfiguration.push(123)
 				} else {
 					configurationTemp = db.Configuration.create({
 						cveVers
@@ -118,18 +122,21 @@ module.exports = {
 
 			// write Description
 			try {
-				let desriptionTemp = null;
+				let desriptionTemp = [];
 
 				data.cve.description.description_data.forEach(description => {
-					desriptionTemp = db.Description.create({
+					desriptionTemp.push({
 						lang: description.lang,
 						value: description.value
-					}).catch(err => {
+					});
+				});
+
+				db.Description.bulkCreate(desriptionTemp)
+					.catch(err => {
 						console.error(err);
 					});
 
-					writeDescription.push(desriptionTemp.get().id);
-				});
+				writeDescription.push(12345);
 			} catch (e) {
 				console.log('=====\nError write DESCRIPTION to database\n=====\n');
 				console.error(e);
@@ -196,6 +203,7 @@ module.exports = {
 			// write Vendor product
 			try {
 				let vendorTemp = null;
+				let vendorBulk = [];
 
 				data.cve.affects.vendor.vendor_data.forEach(vendor => {
 					vendor.product.product_data.forEach(product => {
@@ -204,14 +212,12 @@ module.exports = {
 							versions.push(vers);
 						});
 
-						vendorTemp = db.Vendor.create({
+						vendorBulk.push({
 							name: product.product_name,
 							version: versions.join(',')
-						}).catch(err => {
-							console.error(err);
 						});
 
-						writeVendor = vendorTemp.get().id;
+						vendorTemp = 1234567;
 					})
 				});
 			} catch (e) {

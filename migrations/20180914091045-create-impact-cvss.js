@@ -8,17 +8,6 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER
 			},
-			// custom_fkey: {
-			// 	type: 'foreign key',
-			// 	references: {
-			// 		table: 'ImpactCvsses',
-			// 		field: ['vers', 'vectorString', 'accessVector',
-			// 		'accessComplexity', 'authentication', 'confidentialityImpact',
-			// 		'integrityImpact', 'availabilityImpact', 'baseScore']
-			// 	},
-			// 	onDelete: 'cascade',
-			// 	onUpdate: 'cascade'
-			// },
 			vers: Sequelize.FLOAT,
 			vectorString: Sequelize.STRING,
 			accessVector: Sequelize.STRING,
@@ -36,7 +25,17 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.DATE
 			}
-		});
+		})
+		// .then(() => {
+		// 	return queryInterface.addConstraint('ImpactCvsses', [
+		// 		'vers', 'vectorString', 'accessVector',
+		// 		'accessComplexity', 'authentication', 'confidentialityImpact',
+		// 		'integrityImpact', 'availabilityImpact', 'baseScore'
+		// 	], {
+		// 		type: 'primary key',
+		// 		name: 'uniq_row'
+		// 	});
+		// });
 	},
 	down: (queryInterface, Sequelize) => {
 		return queryInterface.dropTable('ImpactCvsses');

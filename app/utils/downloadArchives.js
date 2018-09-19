@@ -21,25 +21,25 @@ module.exports = async function ({ startYear, currentYear }) {
                                 reject(`${ERRORS.CONSOLE.FILE_EXIST} ${i}`);
                             }
                             reject(err);
+                        } else {
+	                        fs.writeFileSync(`./zip_cache/${i}.json.zip`, e.data, 'binary');
+	                        const zip = new require('node-zip')(e.data);
+	                        const fileInArchive = zip.files[Object.keys(zip.files)[0]];
+	                        const raw = new Buffer(fileInArchive._data.getContent());
+	                        const json = JSON.parse(raw.toString());
+
+	                        try {
+		                        chunk(json.CVE_Items, 35).forEach(cve => {
+			                        cve.forEach(el => {
+				                        saveCveToDatabase.save(el);
+			                        });
+		                        });
+	                        } catch (e) {
+		                        console.log('=====\nError save data to database\n=====\n');
+		                        console.error(e);
+	                        }
+	                        return json;
                         }
-
-                        fs.writeFileSync(`./zip_cache/${i}.json.zip`, e.data, 'binary');
-                        const zip = new require('node-zip')(e.data);
-                        const fileInArchive = zip.files[Object.keys(zip.files)[0]];
-                        const raw = new Buffer(fileInArchive._data.getContent());
-                        const json = JSON.parse(raw.toString());
-
-	                    try {
-		                    chunk(json.CVE_Items, 35).forEach(cve => {
-		                    	cve.forEach(el => {
-				                    saveCveToDatabase.save(el);
-			                    });
-		                    });
-	                    } catch (e) {
-		                    console.log('=====\nError save data to database\n=====\n');
-		                    console.error(e);
-	                    }
-                        return json;
                     });
                     checkDownload.push(i);
                 })
