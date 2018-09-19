@@ -118,17 +118,17 @@ module.exports = {
 
 			// write Description
 			try {
-				let desription = null;
+				let desriptionTemp = null;
 
 				data.cve.description.description_data.forEach(description => {
-					desription = db.Description.create({
+					desriptionTemp = db.Description.create({
 						lang: description.lang,
 						value: description.value
 					}).catch(err => {
 						console.error(err);
 					});
 
-					writeDescription.push(desription.get().id);
+					writeDescription.push(desriptionTemp.get().id);
 				});
 			} catch (e) {
 				console.log('=====\nError write DESCRIPTION to database\n=====\n');
@@ -136,58 +136,57 @@ module.exports = {
 			}
 
 			// write References
-			try {
-				data.cve.references.reference_data.forEach(reference => {
-					let tagTemp = null;
-					let refTemp = null;
-					let tags = [];
-
-					// write TAGs
-					try {
-						reference.tags.forEach(tag => {
-							tagTemp = db.Tag.create({
-								value: tag
-							}).catch(err => {
-								console.error(err);
-							});
-
-							tags.push(tagTemp.get().id);
-
-						});
-					} catch (e) {
-						console.log('=====\nError write TAG to database\n=====\n');
-						console.error(e);
-					}
-
-					refTemp = db.Reference.create({
-						url: reference.url,
-						name: reference.name,
-						refsource: reference.refsource,
-						tags: tags.join(',')
-					}).catch(err => {
-						console.error(err);
-					});
-
-					writeReference.push(refTemp.get().id);
-				});
-			} catch (e) {
-				console.log('=====\nError write REFERENCE to database\n=====\n');
-				console.error(e);
-			}
+			// try {
+			// 	data.cve.references.reference_data.forEach(reference => {
+			// 		let tagTemp = null;
+			// 		let refTemp = null;
+			// 		let tags = [];
+			//
+			// 		// write TAGs
+			// 		try {
+			// 			reference.tags.forEach(tag => {
+			// 				tagTemp = db.Tag.create({
+			// 					value: tag
+			// 				}).catch(err => {
+			// 					console.error(err);
+			// 				});
+			//
+			// 				tags.push(tagTemp.get().id);
+			// 			});
+			// 		} catch (e) {
+			// 			console.log('=====\nError write TAG to database\n=====\n');
+			// 			console.error(e);
+			// 		}
+			//
+			// 		refTemp = db.Reference.create({
+			// 			url: reference.url,
+			// 			name: reference.name,
+			// 			refsource: reference.refsource,
+			// 			tags: tags.join(',')
+			// 		}).catch(err => {
+			// 			console.error(err);
+			// 		});
+			//
+			// 		writeReference.push(refTemp.get().id);
+			// 	});
+			// } catch (e) {
+			// 	console.log('=====\nError write REFERENCE to database\n=====\n');
+			// 	console.error(e);
+			// }
 
 			// write Problem
 			try {
-				let problem = null;
+				let problemTemp = null;
 
 				if (data.cve.problemtype.problemtype_data[0].description[0]) {
-					problem = db.Problem.create({
+					problemTemp = db.Problem.create({
 						lang: data.cve.problemtype.problemtype_data[0].description[0].lang,
 						value: data.cve.problemtype.problemtype_data[0].description[0].value
 					}).catch(err => {
 						console.error(err);
 					});
 
-					writeProblem = problem.get().id
+					writeProblem = problemTemp.get().id
 				}
 			} catch (e) {
 				console.log('=====\nError write PROBLEM to database\n=====\n');
@@ -196,7 +195,7 @@ module.exports = {
 
 			// write Vendor product
 			try {
-				let vendor = null;
+				let vendorTemp = null;
 
 				data.cve.affects.vendor.vendor_data.forEach(vendor => {
 					vendor.product.product_data.forEach(product => {
@@ -205,14 +204,14 @@ module.exports = {
 							versions.push(vers);
 						});
 
-						vendor = db.Vendor.create({
+						vendorTemp = db.Vendor.create({
 							name: product.product_name,
 							version: versions.join(',')
 						}).catch(err => {
 							console.error(err);
 						});
 
-						writeVendor.push(vendor.get().id);
+						writeVendor = vendorTemp.get().id;
 					})
 				});
 			} catch (e) {
@@ -226,14 +225,14 @@ module.exports = {
 					idMeta,
 					year,
 					assigner: data.cve.CVE_data_meta.ASSIGNER,
-					type: data.cve.CVE_data_type,
-					format: data.cve.CVE_data_format,
-					version: data.cve.CVE_data_version,
-					VendorId: writeVendor.join(','),
-					ConfigurationId: writeConfiguration.join(','),
-					ReferenceId: writeReference.join(','),
-					DescriptionId: writeDescription.join(','),
-					ProblemId: writeProblem ? writeProblem.id : null,
+					type: data.cve.data_type,
+					format: data.cve.data_format,
+					version: data.cve.data_version,
+					VendorId: writeVendor,
+					// ConfigurationId: writeConfiguration.join(','),
+					// ReferenceId: writeReference.join(','),
+					// DescriptionId: writeDescription.join(','),
+					// ProblemId: writeProblem ? writeProblem.id : null,
 					publishedDate: data.publishedDate,
 					lastModifiedDate: data.lastModifiedDate
 				}).then(el => {

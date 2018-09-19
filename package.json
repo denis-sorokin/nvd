@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "ntl -d",
-    "dev": "nodemon app.js --ignore 'config/*'",
+    "dev": "nodemon app.js --max_new_space_size=4096 --max_old_space_size=4096 --ignore 'config/*'",
     "pm:start": "pm2 start app.js --ignore 'config/*' --name 'check_nvd'",
     "pm:stop": "pm2 delete 'check_nvd'",
     "pm:restart": "npm run pm:stop && npm run pm:start"
